@@ -5,10 +5,10 @@
 #include "../include/handler.h"
 
 Handler::Handler() {
-
 }
 
 int Handler::run(Param params) {
+    params.printParams();
     return 0;
 }
 

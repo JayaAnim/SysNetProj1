@@ -14,6 +14,28 @@ Param::Param() {
     }
 }
 
+Param::Param(const Param &other) {
+    size_t outputSize = strlen(other.getInputRedirect());
+    size_t inputSize = strlen(other.getInputRedirect());
+
+    this->outputRedirect = new char[outputSize + 1];
+    strcpy(this->outputRedirect, other.getOutputRedirect());
+    this->inputRedirect = new char[inputSize + 1];
+    strcpy(this->inputRedirect, other.getInputRedirect());
+
+    this->background = other.getBackground();
+
+    this->argumentCount = other.getArgumentCount();
+    for (int i = 0; i < this->argumentCount; ++i) {
+
+        size_t argSize = strlen(other.getArgumentVector()[i]); 
+        this->argumentVector[i] = new char[argSize + 1];
+
+        strcpy(this->argumentVector[i], other.getArgumentVector()[i]);
+
+    }
+}
+
 Param::~Param() {
 	if (inputRedirect != nullptr) {
 		 delete inputRedirect;
@@ -41,7 +63,7 @@ void Param::printParams() {
     }
 }
 
-char* Param::getInputRedirect() {
+char* Param::getInputRedirect() const {
     return inputRedirect;
 }
 
@@ -52,7 +74,7 @@ void Param::setInputRedirect(char* input) {
     inputRedirect = (input ? strdup(input) : nullptr);
 }
 
-char* Param::getOutputRedirect() {
+char* Param::getOutputRedirect() const {
     return outputRedirect;
 }
 
@@ -66,15 +88,15 @@ int Param::setBackground(int isBackground) {
     return background;
 }
 
-int Param::getBackground() {
+int Param::getBackground() const {
     return background;
 }
 
-int Param::getArgumentCount() {
+int Param::getArgumentCount() const {
     return argumentCount;
 }
 
-char** Param::getArgumentVector() {
+char** Param::getArgumentVector() const {
     return (char**)argumentVector;
 }
 
@@ -87,7 +109,7 @@ bool Param::addArgument(char* arg) {
     return true;
 }
 
-char** Param::getArguments() {
+char** Param::getArguments() const {
 	if (argumentCount > 0) return (char**)argumentVector;
 	return nullptr;
 }
