@@ -57,7 +57,7 @@ bool Parse::run() {
 			int len = getArgLen(input, i);
 			char* arg = grabArg(input, i, len);
 			i = i + len - 1;
-			if (std::strcmp(arg, "Debug") == 0) {
+			if (std::strcmp(arg, "-Debug") == 0) {
 				debug = true;
 			} else {
 				std::cout << "[ERROR] Exiting because of invalid flag [ - ], valid flags include: [-Debug]" << std::endl;
@@ -70,6 +70,8 @@ bool Parse::run() {
 			if (std::strcmp(arg, "exit") == 0) return false;
 			addArgument(arg);
 		}
+
+	//	std::cout << "Arg Count: " << getArgumentCount() << "\nstrlen: " << strlen << "\ni: " << i << std::endl;
 	}
 	if (debug) printParams();
 
@@ -83,7 +85,7 @@ char* Parse::grabArg(char input[], int pos, int len) {
 		arg[i] = input[pos];
 		++pos;
 	}
-	arg[len + 1] = '\0';
+	arg[len] = '\0';
 	return arg;
 }
 
