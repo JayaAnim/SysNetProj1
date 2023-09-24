@@ -7,8 +7,9 @@ class Handler {
 	public:
         Handler();
         int run(Param params);
-        int list();
-        int cat();
+        int list(char* outputRedirect = nullptr);
+        int cat(char* inputFile = nullptr, char* inputRedirect = nullptr);
+        int grep(bool printLines, char* word, char* file);
         int program(char* program);
     private:
 };
