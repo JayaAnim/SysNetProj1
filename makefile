@@ -17,16 +17,19 @@ $(BINDIR):
 $(OBJDIR):
 	mkdir -p $(OBJDIR)
 
-$(BINDIR)/myshell: $(OBJDIR)/myshell.o $(OBJDIR)/parse.o $(OBJDIR)/param.o $(OBJDIR)/run.o
+$(BINDIR)/myshell: $(OBJDIR)/myshell.o $(OBJDIR)/parse.o $(OBJDIR)/param.o $(OBJDIR)/utils.o $(OBJDIR)/run.o 
 	$(CXX) $(CXXFLAGS) $^ -o $@
 
-$(OBJDIR)/myshell.o: $(SRCDIR)/myshell.cpp $(OBJDIR)/parse.o 
+$(OBJDIR)/myshell.o: $(SRCDIR)/myshell.cpp $(OBJDIR)/parse.o $(OBJDIR)/utils.o
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(OBJDIR)/parse.o: $(SRCDIR)/parse.cpp $(INCDIR)/parse.h $(OBJDIR)/param.o
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(OBJDIR)/param.o: $(SRCDIR)/param.cpp $(INCDIR)/param.h
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+$(OBJDIR)/utils.o: $(SRCDIR)/utils.cpp $(INCDIR)/utils.h
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(OBJDIR)/run.o: $(SRCDIR)/run.cpp $(INCDIR)/run.h

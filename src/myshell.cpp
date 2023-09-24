@@ -1,11 +1,13 @@
 #include <iostream>
-#include <unistd.h>
-#include <cstring>
-#include <sys/wait.h>
 #include "../include/parse.h"
 #include "../include/run.h"
 
+#include "../include/utils.h"
+
 int main(int argc, char* argv[]) {
+    
+    listDir();    
+    /*
     bool debug = false;
     if (argc >= 2) {
         if (strcmp(argv[1], "-Debug") == 0) {
@@ -27,6 +29,10 @@ int main(int argc, char* argv[]) {
     }
 
     return 1;
+    */
+
+
+
     /*
 	std::cout << "Program starting" << std::endl;	
 	int status;
