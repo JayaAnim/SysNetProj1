@@ -6,18 +6,18 @@
 
 void Run::runCommand(Parse* parser) {
 
-    if (parser->getInputRedirect() != NULL) {
-        freopen(parser->getInputRedirect(), "r", stdin);
+    if (parser->getParams()->getInputRedirect() != NULL) {
+        freopen(parser->getParams()->getInputRedirect(), "r", stdin);
     }
-    if (parser->getOutputRedirect() != NULL) {
-        freopen(parser->getOutputRedirect(), "w", stdout);
+    if (parser->getParams()->getOutputRedirect() != NULL) {
+        freopen(parser->getParams()->getOutputRedirect(), "w", stdout);
     }
 
-    char* args[parser->getArgumentCount()+1];
-    for (int i=0; i < parser->getArgumentCount(); i++) {
-        args[i] = parser->getArguments()[i];
+    char* args[parser->getParams()->getArgumentCount()+1];
+    for (int i=0; i < parser->getParams()->getArgumentCount(); i++) {
+        args[i] = parser->getParams()->getArguments()[i];
     }
-    args[parser->getArgumentCount()] = nullptr;
+    args[parser->getParams()->getArgumentCount()] = nullptr;
 
     execvp(args[0], args);
 
