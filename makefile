@@ -17,10 +17,10 @@ $(BINDIR):
 $(OBJDIR):
 	mkdir -p $(OBJDIR)
 
-$(BINDIR)/myshell: $(OBJDIR)/myshell.o $(OBJDIR)/parse.o $(OBJDIR)/param.o $(OBJDIR)/utils.o $(OBJDIR)/run.o 
+$(BINDIR)/myshell: $(OBJDIR)/myshell.o $(OBJDIR)/parse.o $(OBJDIR)/param.o $(OBJDIR)/utils.o $(OBJDIR)/handler.o 
 	$(CXX) $(CXXFLAGS) $^ -o $@
 
-$(OBJDIR)/myshell.o: $(SRCDIR)/myshell.cpp $(OBJDIR)/parse.o $(OBJDIR)/utils.o
+$(OBJDIR)/myshell.o: $(SRCDIR)/myshell.cpp $(OBJDIR)/parse.o $(OBJDIR)/handler.o
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(OBJDIR)/parse.o: $(SRCDIR)/parse.cpp $(INCDIR)/parse.h $(OBJDIR)/param.o
@@ -29,10 +29,7 @@ $(OBJDIR)/parse.o: $(SRCDIR)/parse.cpp $(INCDIR)/parse.h $(OBJDIR)/param.o
 $(OBJDIR)/param.o: $(SRCDIR)/param.cpp $(INCDIR)/param.h
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-$(OBJDIR)/utils.o: $(SRCDIR)/utils.cpp $(INCDIR)/utils.h
-	$(CXX) $(CXXFLAGS) -c $< -o $@
-
-$(OBJDIR)/run.o: $(SRCDIR)/run.cpp $(INCDIR)/run.h
+$(OBJDIR)/handler.o: $(SRCDIR)/handler.cpp $(INCDIR)/handler.h
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:

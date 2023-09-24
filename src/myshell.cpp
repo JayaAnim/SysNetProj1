@@ -1,13 +1,13 @@
 #include <iostream>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
 #include "../include/parse.h"
-#include "../include/run.h"
+#include "../include/handler.h"
 
-#include "../include/utils.h"
 
 int main(int argc, char* argv[]) {
-    
-    listDir();    
-    /*
+
     bool debug = false;
     if (argc >= 2) {
         if (strcmp(argv[1], "-Debug") == 0) {
@@ -26,39 +26,55 @@ int main(int argc, char* argv[]) {
         if (debug) {
             parser->getParams()->printParams();
         }
+        
+        //Check if background process needs to be executed
+
+        //if process needs to be executed in background 
+
+            //create fork
+
+            //in parent process rerun while loop to wait for next command
+        
+            //in child process pass params to Run so exec can be called for proper command
+
+        //if process needs to be executed in foreground
+
+        //pass params to run Run class so exec can be called for proper command
+
+        //wait for process to complete then continue while loop
+
+        bool backgroundProcess = parser->getParams()->getBackground();
+
+        pid_t pid = fork();
+
+        if (pid < 0) {
+            perror("Fork failed");
+            exit(1);
+        } else if (pid == 0) {
+
+            Handler* runner = new Handler();
+            runner->run(*parser->getParams());
+
+            exit(0);
+        } else {
+            // Parent process
+
+            if (!backgroundProcess) {
+                // Wait for process to complete in foreground
+                int status;
+                waitpid(pid, &status, 0);
+
+                if (WIFEXITED(status)) {
+                    std::cout << "Child process exited with status " << WEXITSTATUS(status) << std::endl;
+                }
+            }
+        }
     }
 
+    while (wait(NULL) > 0) {}
+
+    //if process ends, whether through child process error, parent error, or exit being called, ensure all child processes end, and no zombie processes exist
+
     return 1;
-    */
 
-
-
-    /*
-	std::cout << "Program starting" << std::endl;	
-	int status;
-	pid_t pid = -1;
-	Parse* parser = nullptr;
-	do {
-		if (parser != nullptr) {
-			delete parser;
-		}
-		parser = new Parse();
-
-		if(!parser->run()) {
-			break;
-		}
-
-		pid = fork();
-
-		// Child Process
-		if (pid == 0) {
-			Run run;
-			run.runCommand(parser);
-		}
-
-	} while (parser->getBackground() || waitpid(pid, &status, 0) > 0);
-	
-	delete parser;
-
-    */
 }
