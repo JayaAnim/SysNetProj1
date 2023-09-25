@@ -1,3 +1,12 @@
+/*
+This program is a functioning shell for file management
+
+@author Chase Lamkin
+@author Caleb Shafer
+@date 9/24/2023
+@info Course COP4634
+*/
+
 #include <iostream>
 #include <cstring>
 #include "../include/param.h"
@@ -14,18 +23,46 @@ Param::Param() {
     }
 }
 
+Param::Param(const Param &other) {
+
+    if (other.getInputRedirect() != nullptr) {
+        this->inputRedirect = strdup(other.getInputRedirect());
+    } else {
+        this->inputRedirect = nullptr;
+    }
+
+    if (other.getOutputRedirect() != nullptr) {
+        this->outputRedirect = strdup(other.getOutputRedirect());
+    } else {
+        this->outputRedirect = nullptr;
+    }
+    
+
+    this->background = other.getBackground();
+
+    this->argumentCount = other.getArgumentCount();
+    for (int i = 0; i < this->argumentCount; ++i) {
+        this->argumentVector[i] = strdup(other.getArgumentVector()[i]);
+    }
+
+    for (int i = this->argumentCount; i < 32; ++i) {
+        this->argumentVector[i] = nullptr;
+    }
+
+}
+
 Param::~Param() {
 	if (inputRedirect != nullptr) {
-		 delete inputRedirect;
+		 delete[] inputRedirect;
 		 inputRedirect = nullptr;
 	}
 	if (outputRedirect != nullptr) {
-		delete outputRedirect;
+		delete[] outputRedirect;
 		outputRedirect = nullptr;
 	}
     for (int i = 0; i < argumentCount; i++) {
 		if (argumentVector[i] != nullptr) {
-			delete argumentVector[i];
+			delete[] argumentVector[i];
 			argumentVector[i] = nullptr;
 		}
     }
@@ -41,40 +78,37 @@ void Param::printParams() {
     }
 }
 
-char* Param::getInputRedirect() {
+char* Param::getInputRedirect() const {
     return inputRedirect;
 }
 
 void Param::setInputRedirect(char* input) {
-	if (inputRedirect != nullptr) {
-		delete[] inputRedirect;
-	}
+	if (inputRedirect != nullptr) delete[] inputRedirect;
     inputRedirect = (input ? strdup(input) : nullptr);
 }
 
-char* Param::getOutputRedirect() {
+char* Param::getOutputRedirect() const {
     return outputRedirect;
 }
 
 void Param::setOutputRedirect(char* output) {
-    delete[] outputRedirect;
+    if (outputRedirect != nullptr) delete[] outputRedirect;
     outputRedirect = (output ? strdup(output) : nullptr);
 }
 
-int Param::setBackground(int isBackground) {
-    background = isBackground;
-    return background;
+void Param::setBackground(int isBackground) {
+    this->background = isBackground;
 }
 
-int Param::getBackground() {
-    return background;
+int Param::getBackground() const {
+    return this->background;
 }
 
-int Param::getArgumentCount() {
-    return argumentCount;
+int Param::getArgumentCount() const {
+    return this->argumentCount;
 }
 
-char** Param::getArgumentVector() {
+char** Param::getArgumentVector() const {
     return (char**)argumentVector;
 }
 
@@ -86,10 +120,3 @@ bool Param::addArgument(char* arg) {
     argumentCount++;
     return true;
 }
-
-char** Param::getArguments() {
-	if (argumentCount > 0) return (char**)argumentVector;
-	return nullptr;
-}
-
-

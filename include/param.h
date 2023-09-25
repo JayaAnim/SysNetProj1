@@ -7,27 +7,27 @@
 
 class Param {
 	private:
-		char *inputRedirect; /* file name or NULL */
-		char *outputRedirect; /* file name or NULL */
+		char *inputRedirect = nullptr; /* file name or NULL */
+		char *outputRedirect = nullptr; /* file name or NULL */
 		int background; /* either 0 (false) or 1 (true) */
 		int argumentCount; /* number of tokens in argument vector */
 		char *argumentVector[MAXARGS]; /* array of arguments */
 	public:
 		Param();
+        Param(const Param &other);
 		~Param();
 		//Prints param object
 		void printParams();
 		//getters and setters
-		char* getInputRedirect();
+		char* getInputRedirect() const;
 		void setInputRedirect(char* input);
-		char* getOutputRedirect();
+		char* getOutputRedirect() const;
 		void setOutputRedirect(char* output);
-		int setBackground(int isBackground);
-		int getBackground();
-		int getArgumentCount();
-		char** getArgumentVector();
+		void setBackground(int isBackground);
+		int getBackground() const;
+		int getArgumentCount() const;
+		char** getArgumentVector() const;
 		bool addArgument(char* arg);
-		char** getArguments();
 };
 
 #endif
