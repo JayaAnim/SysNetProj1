@@ -29,7 +29,7 @@ bool Parse::parse() {
     //Gets argument input from user
     const int BUFFER_SIZE = 300;
     char input[BUFFER_SIZE];
-	std::cout << "Please enter your command: " << std::endl;
+
     std::cin.getline(input, BUFFER_SIZE);
 
 	int strlen = std::cin.gcount();

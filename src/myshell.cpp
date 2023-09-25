@@ -17,6 +17,7 @@ This program is a functioning shell for file management
 
 int main(int argc, char* argv[]) {
 
+    //Ensures program is started only with ./myshell [-Debug]
     bool debug = false;
     if (argc >= 2) {
         if (strcmp(argv[1], "-Debug") == 0) {
@@ -26,42 +27,65 @@ int main(int argc, char* argv[]) {
             return 0;
         }
     }
-    
+
+    //Parser to parse command line
     Parse* parser = new Parse();
     while (true) {
+
+        //Parse arguments, if error end program
         if (!parser->parse()) {
             break;
         }
+        
+        //If debug is true print params
         if (debug) {
             parser->getParams()->printParams();
         }
         
-        bool backgroundProcess = parser->getParams()->getBackground();
 
-        pid_t pid = fork();
-
-        if (pid < 0) {
-
-            perror("Fork failed");
-            exit(1);
-
-        } else if (pid == 0) {
+        //If change in directory, do it in parent process to affect current shell
+        if (strcmp(parser->getParams()->getArgumentVector()[0], "cd") == 0) {
 
             Handler* runner = new Handler();
-            exit(runner->run(*parser->getParams()));
+            runner->handleDir(*parser->getParams());
+            delete runner;
 
-        } else if (!backgroundProcess) {
+        }
+        else {
 
-            int status;
-            waitpid(pid, &status, 0);
+            //Check if background process needs to be made
+            bool backgroundProcess = parser->getParams()->getBackground();
 
-            if (WIFEXITED(status)) {
-                std::cout << "Child process exited with status " << WEXITSTATUS(status) << std::endl;
+            //Create child process
+            pid_t pid = fork();
+
+            //If error creating fork end process
+            if (pid < 0) {
+
+                perror("Fork failed");
+                exit(1);
+
+            //If child process execute commands given
+            } else if (pid == 0) {
+
+                Handler* runner = new Handler();
+                int res = runner->execute(*parser->getParams());
+                delete runner;
+                exit(res);
+
+            //If not a background process wait for child processes to complete
+            } else if (!backgroundProcess) {
+
+                int status;
+                waitpid(pid, &status, 0);
             }
         }
     }
 
-    while (wait(NULL) > 0) {}
+    //Ensure no zombie processes exist
+    int status;
+    pid_t terminated_pid;
+    while ((terminated_pid = wait(&status)) > 0) {}
 
 
     return 1;

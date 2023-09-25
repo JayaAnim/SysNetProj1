@@ -6,7 +6,8 @@
 class Handler {
 	public:
         Handler();
-        int run(Param params);
+        int execute(Param params);
+        int handleDir(Param params);
     private:
 };
 

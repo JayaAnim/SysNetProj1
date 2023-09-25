@@ -10,6 +10,8 @@ This program is a functioning shell for file management
 #include <iostream>
 #include <cstring>
 #include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include "../include/param.h"
 #include "../include/handler.h"
 
@@ -19,28 +21,37 @@ This program is a functioning shell for file management
 Handler::Handler() {
 }
 
-int Handler::run(Param params) {
+int Handler::execute(Param params) {
+
     if (params.getOutputRedirect() != nullptr) {
         freopen(params.getOutputRedirect(), "w", stdout);
     }
 
     if (params.getInputRedirect() != nullptr) {
         freopen(params.getInputRedirect(), "r", stdin);
-    }
-    
-     
-
-    //Ensures no bad special characters exist (i.e \n, \t, etc)
-    //char* cmd = strdup(params.getArgumentVector()[0]);
-    char* args[MAXARGS]; 
-    for (int i = 0; i <= params.getArgumentCount(); ++i) {
-        if (i == params.getArgumentCount()) {
-            args[i] = (char*)NULL;
-        } else {
-            args[i] = strdup(params.getArgumentVector()[i]);
-        }
-    }
+    }     
 
     return execvp(params.getArgumentVector()[0], params.getArgumentVector());
 }
 
+int Handler::handleDir(Param params) {
+    if (params.getArgumentCount() == 1) {
+        const char *home_dir = getenv("HOME");
+        if (home_dir != nullptr) {
+            std::cout << "Home directory not found" << std::endl;
+            return -1;
+        }
+        return chdir(home_dir);
+    }
+    else if (params.getArgumentCount() == 2) {
+        if (chdir(params.getArgumentVector()[1]) != 0) {
+            std::cout << params.getArgumentVector()[1] << " is not a valid directory" << std::endl;
+            return -1;
+        }
+        return 1;
+    }
+    else {
+        std::cout << "Not a valid directory, use: cd [relative path | absolute path]" << std::endl;
+        return -1;
+    }
+}
