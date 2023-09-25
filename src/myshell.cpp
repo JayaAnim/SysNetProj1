@@ -32,7 +32,6 @@ int main(int argc, char* argv[]) {
     //Parser to parse command line
     Parse* parser = new Parse();
     while (true) {
-        std::cout << "Ready for new input" << std::endl;
         //Parse arguments, if error end program
         if (!parser->parse()) {
             break;
