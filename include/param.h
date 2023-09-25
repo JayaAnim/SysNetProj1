@@ -28,7 +28,6 @@ class Param {
 		int getArgumentCount() const;
 		char** getArgumentVector() const;
 		bool addArgument(char* arg);
-		char** getArguments() const;
 };
 
 #endif

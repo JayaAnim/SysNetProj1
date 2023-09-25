@@ -109,7 +109,7 @@ char* Parse::grabArg(char input[], int pos, int len) {
 
 int Parse::getArgLen(char input[], int pos) {
 	int start = pos;
-	for (; input[pos] != '\0' && input[pos] != '\\' && input[pos] != ' '; ++pos);
+	for (; input[pos] != '\0' && input[pos] != '\\' && input[pos] != ' ' && input[pos] != '\n'; ++pos);
 	return pos - start;
 }
 

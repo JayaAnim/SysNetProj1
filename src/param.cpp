@@ -17,17 +17,13 @@ Param::Param() {
 Param::Param(const Param &other) {
 
     if (other.getInputRedirect() != nullptr) {
-        size_t inputSize = strlen(other.getInputRedirect());
-        this->inputRedirect = new char[inputSize + 1];
-        strcpy(this->inputRedirect, other.getInputRedirect());
+        this->inputRedirect = strdup(other.getInputRedirect());
     } else {
         this->inputRedirect = nullptr;
     }
 
     if (other.getOutputRedirect() != nullptr) {
-        size_t outputSize = strlen(other.getOutputRedirect());
-        this->outputRedirect = new char[outputSize + 1];
-        strcpy(this->outputRedirect, other.getOutputRedirect());
+        this->outputRedirect = strdup(other.getOutputRedirect());
     } else {
         this->outputRedirect = nullptr;
     }
@@ -37,12 +33,11 @@ Param::Param(const Param &other) {
 
     this->argumentCount = other.getArgumentCount();
     for (int i = 0; i < this->argumentCount; ++i) {
+        this->argumentVector[i] = strdup(other.getArgumentVector()[i]);
+    }
 
-        size_t argSize = strlen(other.getArgumentVector()[i]); 
-        this->argumentVector[i] = new char[argSize + 1];
-
-        strcpy(this->argumentVector[i], other.getArgumentVector()[i]);
-
+    for (int i = this->argumentCount; i < 32; ++i) {
+        this->argumentVector[i] = nullptr;
     }
 
 }
@@ -58,7 +53,7 @@ Param::~Param() {
 	}
     for (int i = 0; i < argumentCount; i++) {
 		if (argumentVector[i] != nullptr) {
-			delete argumentVector[i];
+			delete[] argumentVector[i];
 			argumentVector[i] = nullptr;
 		}
     }
@@ -116,9 +111,3 @@ bool Param::addArgument(char* arg) {
     argumentCount++;
     return true;
 }
-
-char** Param::getArguments() const {
-	if (argumentCount > 0) return (char**)argumentVector;
-	return nullptr;
-}
-
