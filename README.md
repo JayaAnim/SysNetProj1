@@ -6,6 +6,13 @@
 
 - In order to run cat <myshell.cpp [&] as specified in the test cases myshell.cpp needs to be in the current working directory
  - myshell.cpp is not in the root directory since the program structure is split up into separate directories, for easy of use for graders I have copied the file and added it to the root directory, however, the cpp file in the root directory is not for compiling purposes
+- When running exit, the main program sends a kill signal to all child processes and waits for all child processes to terminate before exiting. 
+
+## Rules
+- When using the flags [< | >] for files, ensure there are no spaces between the flags and the file names
+
+> [!NOTE]
+> Also ensure that the file is in the current directory that the command is ran from, or that the full path is specified after [< | >]
 
 ## How to Compile Program
 
