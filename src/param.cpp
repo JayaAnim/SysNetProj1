@@ -15,13 +15,23 @@ Param::Param() {
 }
 
 Param::Param(const Param &other) {
-    size_t outputSize = strlen(other.getInputRedirect());
-    size_t inputSize = strlen(other.getInputRedirect());
 
-    this->outputRedirect = new char[outputSize + 1];
-    strcpy(this->outputRedirect, other.getOutputRedirect());
-    this->inputRedirect = new char[inputSize + 1];
-    strcpy(this->inputRedirect, other.getInputRedirect());
+    if (other.getInputRedirect() != nullptr) {
+        size_t inputSize = strlen(other.getInputRedirect());
+        this->inputRedirect = new char[inputSize + 1];
+        strcpy(this->inputRedirect, other.getInputRedirect());
+    } else {
+        this->inputRedirect = nullptr;
+    }
+
+    if (other.getOutputRedirect() != nullptr) {
+        size_t outputSize = strlen(other.getOutputRedirect());
+        this->outputRedirect = new char[outputSize + 1];
+        strcpy(this->outputRedirect, other.getOutputRedirect());
+    } else {
+        this->outputRedirect = nullptr;
+    }
+    
 
     this->background = other.getBackground();
 
@@ -34,15 +44,16 @@ Param::Param(const Param &other) {
         strcpy(this->argumentVector[i], other.getArgumentVector()[i]);
 
     }
+
 }
 
 Param::~Param() {
 	if (inputRedirect != nullptr) {
-		 delete inputRedirect;
+		 delete[] inputRedirect;
 		 inputRedirect = nullptr;
 	}
 	if (outputRedirect != nullptr) {
-		delete outputRedirect;
+		delete[] outputRedirect;
 		outputRedirect = nullptr;
 	}
     for (int i = 0; i < argumentCount; i++) {
@@ -68,9 +79,7 @@ char* Param::getInputRedirect() const {
 }
 
 void Param::setInputRedirect(char* input) {
-	if (inputRedirect != nullptr) {
-		delete[] inputRedirect;
-	}
+	if (inputRedirect != nullptr) delete[] inputRedirect;
     inputRedirect = (input ? strdup(input) : nullptr);
 }
 
@@ -79,21 +88,20 @@ char* Param::getOutputRedirect() const {
 }
 
 void Param::setOutputRedirect(char* output) {
-    delete[] outputRedirect;
+    if (outputRedirect != nullptr) delete[] outputRedirect;
     outputRedirect = (output ? strdup(output) : nullptr);
 }
 
-int Param::setBackground(int isBackground) {
-    background = isBackground;
-    return background;
+void Param::setBackground(int isBackground) {
+    this->background = isBackground;
 }
 
 int Param::getBackground() const {
-    return background;
+    return this->background;
 }
 
 int Param::getArgumentCount() const {
-    return argumentCount;
+    return this->argumentCount;
 }
 
 char** Param::getArgumentVector() const {
@@ -113,5 +121,4 @@ char** Param::getArguments() const {
 	if (argumentCount > 0) return (char**)argumentVector;
 	return nullptr;
 }
-
 
