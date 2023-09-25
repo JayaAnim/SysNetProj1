@@ -1,3 +1,12 @@
+/*
+This program is a functioning shell for file management
+
+@author Chase Lamkin
+@author Caleb Shafer
+@date 9/24/2023
+@info Course COP4634
+*/
+
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
