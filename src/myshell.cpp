@@ -8,6 +8,7 @@
 
 int main(int argc, char* argv[]) {
 
+    //Ensures program is started only with ./myshell [-Debug]
     bool debug = false;
     if (argc >= 2) {
         if (strcmp(argv[1], "-Debug") == 0) {
@@ -18,6 +19,7 @@ int main(int argc, char* argv[]) {
         }
     }
 
+    //Parser to parse command line
     Parse* parser = new Parse();
     while (true) {
 
@@ -36,7 +38,7 @@ int main(int argc, char* argv[]) {
         if (strcmp(parser->getParams()->getArgumentVector()[0], "cd") == 0) {
 
             Handler* runner = new Handler();
-            runner->run(*parser->getParams());
+            runner->handleDir(*parser->getParams());
             delete runner;
 
         }
@@ -58,7 +60,7 @@ int main(int argc, char* argv[]) {
             } else if (pid == 0) {
 
                 Handler* runner = new Handler();
-                int res = runner->run(*parser->getParams());
+                int res = runner->execute(*parser->getParams());
                 delete runner;
                 exit(res);
 
@@ -71,7 +73,10 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    while (wait(NULL) > 0) {}
+    //Ensure no zombie processes exist
+    int status;
+    pid_t terminated_pid;
+    while ((terminated_pid = wait(&status)) > 0) {}
 
 
     return 1;
