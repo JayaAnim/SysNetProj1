@@ -16,7 +16,7 @@ $(OBJDIR):
 ./myshell: $(OBJDIR)/myshell.o $(OBJDIR)/parse.o $(OBJDIR)/param.o $(OBJDIR)/handler.o 
 	$(CXX) $(CXXFLAGS) $^ -o $@
 
-./slow: $(SRCDIR)/slow.c 
+./slow: $(SRCDIR)/slow.cpp
 	$(CXX) $(CXXFLAGS) $^ -o $@
 
 $(OBJDIR)/myshell.o: $(SRCDIR)/myshell.cpp $(OBJDIR)/parse.o $(OBJDIR)/handler.o

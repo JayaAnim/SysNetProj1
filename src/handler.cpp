@@ -2,7 +2,6 @@
 #include <cstring>
 #include <unistd.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include "../include/param.h"
 #include "../include/handler.h"
 

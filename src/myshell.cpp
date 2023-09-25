@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <signal.h>
 #include "../include/parse.h"
 #include "../include/handler.h"
 
@@ -22,7 +23,7 @@ int main(int argc, char* argv[]) {
     //Parser to parse command line
     Parse* parser = new Parse();
     while (true) {
-
+        std::cout << "Ready for new input" << std::endl;
         //Parse arguments, if error end program
         if (!parser->parse()) {
             break;
@@ -73,12 +74,15 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    //Ensure no zombie processes exist
+
     int status;
     pid_t terminated_pid;
-    while ((terminated_pid = wait(&status)) > 0) {}
+    std::cout << "Killing child processes" << std::endl;
+    while ((terminated_pid = wait(&status)) > 0) {
+        kill(terminated_pid, SIGQUIT);
+    }
 
 
-    return 1;
+    return 0;
 
 }
