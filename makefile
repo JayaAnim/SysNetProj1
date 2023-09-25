@@ -8,12 +8,15 @@ SRCDIR = src
 INCDIR = include
 OBJDIR = .
 
-all: $(OBJDIR) ./myshell clean
+all: $(OBJDIR) ./myshell ./slow clean
 
 $(OBJDIR):
 	mkdir -p $(OBJDIR)
 
 ./myshell: $(OBJDIR)/myshell.o $(OBJDIR)/parse.o $(OBJDIR)/param.o $(OBJDIR)/handler.o 
+	$(CXX) $(CXXFLAGS) $^ -o $@
+
+./slow: $(SRCDIR)/slow.c 
 	$(CXX) $(CXXFLAGS) $^ -o $@
 
 $(OBJDIR)/myshell.o: $(SRCDIR)/myshell.cpp $(OBJDIR)/parse.o $(OBJDIR)/handler.o
